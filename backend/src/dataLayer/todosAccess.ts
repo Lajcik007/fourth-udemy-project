@@ -57,6 +57,7 @@ export class TodosAccess {
     }
 
     async removeTodo(todoId: string): Promise<void> {
+        logger.info('Deleting todo with Id', todoId)
         await this.docClient.delete({
             TableName: this.todosTable,
             Key:{
@@ -66,6 +67,7 @@ export class TodosAccess {
     }
 
     async addAttachmentUrl(todoId: string): Promise<void> {
+        logger.info('Adding attachmentUrl to todo with Id', todoId)
         await this.docClient.update({
             TableName: this.todosTable,
             Key:{
@@ -80,6 +82,7 @@ export class TodosAccess {
     }
 
     async updateTodo(todoId: string, todoData: UpdateTodoRequest): Promise<void> {
+        logger.info('Updating todo with Id', todoId)
         await this.docClient.update({
             TableName: this.todosTable,
             Key:{
