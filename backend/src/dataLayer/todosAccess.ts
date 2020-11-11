@@ -13,7 +13,7 @@ export class TodosAccess {
        private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
        private readonly todosTable = process.env.TODOS_TABLE,
        private readonly userIdIndex = process.env.USER_ID_INDEX,
-       private readonly bucketName = process.env.TODOS_TABLE
+       private readonly bucketName = process.env.IMAGES_S3_BUCKET
     ) {}
 
     async getAllTodos(userId: string): Promise<TodoItem[]> {
