@@ -4,16 +4,50 @@ service:
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
 
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
-functions:
+  environment:
+    TODOS_TABLE: Todos-${self:provider.stage}
+    USER_ID_INDEX: UserIdIndex
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:DeleteItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: TODOs API
+        description: Serverless application for todos
+    models:
+      - name: TodoRequest
+        contentType: application/json
+        schema: ${file(src/models/create-todo-request.json)}
+      - name: TodoUpdateRequest
+        contentType: application/json
+        schema: ${file(src/models/update-todo-request.json)}
+
+functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
@@ -24,6 +58,7 @@ functions:
       - http:
           method: get
           path: todos
+          authorizer: Auth
 
   # TODO: Configure this function
   CreateTodo:
@@ -32,6 +67,14 @@ functions:
       - http:
           method: post
           path: todos
+          cors: true
+          reqValidatorName: RequestBodyValidator
+          authorizer: Auth
+          documentation:
+            summary: Create a new todo
+            description: Create a new todo
+            requestModels:
+              application/json: TodoRequest
 
   # TODO: Configure this function
   UpdateTodo:
@@ -40,6 +83,13 @@ functions:
       - http:
           method: patch
           path: todos/{todoId}
+          authorizer: Auth
+          cors: true
+          documentation:
+            summary: Update todo
+            description: Update todo
+            requestModels:
+              application/json: TodoUpdateRequest
 
   # TODO: Configure this function
   DeleteTodo:
@@ -48,6 +98,8 @@ functions:
       - http:
           method: delete
           path: todos/{todoId}
+          authorizer: Auth
+          cors: true
 
   # TODO: Configure this function
   GenerateUploadUrl:
@@ -56,7 +108,49 @@ functions:
       - http:
           method: post
           path: todos/{todoId}/attachment
+          authorizer: Auth
+          cors: true
 
 resources:
   Resources:
-    # TODO: Add any necessary AWS resources
+
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
+
+    TodosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: todoId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: todoId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.TODOS_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.USER_ID_INDEX}
+            KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
