@@ -6,9 +6,10 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
+  - serverless-jest-plugin
 
-#package:
-#  individually: true
+package:
+  individually: true
 
 provider:
   name: aws
