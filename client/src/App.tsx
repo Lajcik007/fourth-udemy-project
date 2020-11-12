@@ -107,7 +107,7 @@ export default class App extends Component<AppProps, AppState> {
         />
 
         <Route
-          path="/announcements/:todoId/edit"
+          path="/announcements/:announcementId/edit"
           exact
           render={props => {
             return <EditAnnouncement {...props} auth={this.props.auth} />
