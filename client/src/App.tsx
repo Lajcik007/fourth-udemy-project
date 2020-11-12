@@ -6,7 +6,7 @@ import Auth from './auth/Auth'
 import { EditTodo } from './components/EditTodo'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
-import { Todos } from './components/Todos'
+import { Announcements } from './components/Announcements'
 import { MyAnnouncements } from './components/MyAnnouncements'
 
 export interface AppProps {}
@@ -55,7 +55,7 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   onMyAnnouncementsClick = () => {
-    this.props.history.push(`/todos/my/announcements`)
+    this.props.history.push(`/announcements/my/announcements`)
   }
 
   generateMenu() {
@@ -102,12 +102,12 @@ export default class App extends Component<AppProps, AppState> {
           path="/"
           exact
           render={props => {
-            return <Todos {...props} auth={this.props.auth} />
+            return <Announcements {...props} auth={this.props.auth} />
           }}
         />
 
         <Route
-          path="/todos/:todoId/edit"
+          path="/announcements/:todoId/edit"
           exact
           render={props => {
             return <EditTodo {...props} auth={this.props.auth} />
@@ -115,7 +115,7 @@ export default class App extends Component<AppProps, AppState> {
         />
 
         <Route
-          path="/todos/my/announcements"
+          path="/announcements/my/announcements"
           exact
           render={props => <MyAnnouncements {...props} auth={this.props.auth} />}
         />

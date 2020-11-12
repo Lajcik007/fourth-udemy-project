@@ -12,31 +12,31 @@ import { getAllAnnouncements } from '../api/announcement-api'
 import Auth from '../auth/Auth'
 import { Announcement } from '../types/Announcement'
 
-interface TodosProps {
+interface AnnouncementsProps {
   auth: Auth
   history: History
 }
 
-interface TodosState {
-  todos: Announcement[]
-  loadingTodos: boolean
+interface AnnouncementsState {
+  announcements: Announcement[]
+  loadingAnnouncements: boolean
 }
 
-export class Todos extends React.PureComponent<TodosProps, TodosState> {
-  state: TodosState = {
-    todos: [],
-    loadingTodos: true
+export class Announcements extends React.PureComponent<AnnouncementsProps, AnnouncementsState> {
+  state: AnnouncementsState = {
+    announcements: [],
+    loadingAnnouncements: true
   }
 
   async componentDidMount() {
     try {
-      const todos = await getAllAnnouncements(this.props.auth.getIdToken())
+      const announcements = await getAllAnnouncements(this.props.auth.getIdToken())
       this.setState({
-        todos,
-        loadingTodos: false
+        announcements,
+        loadingAnnouncements: false
       })
     } catch (e) {
-      alert(`Failed to fetch todos: ${e.message}`)
+      alert(`Failed to fetch announcements: ${e.message}`)
     }
   }
 
@@ -51,7 +51,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   }
 
   renderAnnouncements() {
-    if (this.state.loadingTodos) {
+    if (this.state.loadingAnnouncements) {
       return this.renderLoading()
     }
 
@@ -82,18 +82,18 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
             <Divider />
           </Grid.Column>
         </Grid.Row>
-        {this.state.todos.map((todo, pos) => {
+        {this.state.announcements.map((announcement, pos) => {
           return (
-            <Grid.Row key={todo.announcementId}>
+            <Grid.Row key={announcement.announcementId}>
               <Grid.Column width={5} verticalAlign="middle">
-                {todo.name}
+                {announcement.name}
               </Grid.Column>
               <Grid.Column width={11} verticalAlign="middle">
-                {todo.description}
+                {announcement.description}
               </Grid.Column>
 
-                {todo.attachmentUrl && (
-                  <Image src={todo.attachmentUrl} size="small" wrapped />
+                {announcement.attachmentUrl && (
+                  <Image src={announcement.attachmentUrl} size="small" wrapped />
                 )}
               <Grid.Column width={16}>
                 <Divider />

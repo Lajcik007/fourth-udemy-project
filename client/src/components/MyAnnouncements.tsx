@@ -6,35 +6,35 @@ import { createAnnouncement, deleteAnnouncement, getAnnouncements, patchAnnounce
 import update from 'immutability-helper'
 import { Button, Checkbox, Divider, Grid, Header, Icon, Image, Input, Loader } from 'semantic-ui-react'
 
-interface TodosProps {
+interface AnnouncementsProps {
   auth: Auth
   history: History
 }
 
-interface TodosState {
-  todos: Announcement[]
+interface AnnouncementsState {
+  announcements: Announcement[]
   newTodoName: string
   newTodoDescription: string
-  loadingTodos: boolean
+  loadingAnnouncements: boolean
 }
 
-export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState> {
-  state: TodosState = {
-    todos: [],
+export class MyAnnouncements extends React.PureComponent<AnnouncementsProps, AnnouncementsState> {
+  state: AnnouncementsState = {
+    announcements: [],
     newTodoName: '',
     newTodoDescription: '',
-    loadingTodos: true
+    loadingAnnouncements: true
   }
 
   async componentDidMount() {
     try {
-      const todos = await getAnnouncements(this.props.auth.getIdToken())
+      const announcements = await getAnnouncements(this.props.auth.getIdToken())
       this.setState({
-        todos,
-        loadingTodos: false
+        announcements,
+        loadingAnnouncements: false
       })
     } catch (e) {
-      alert(`Failed to fetch todos: ${e.message}`)
+      alert(`Failed to fetch announcements: ${e.message}`)
     }
   }
 
@@ -47,14 +47,14 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
   }
 
   onEditButtonClick = (todoId: string) => {
-    this.props.history.push(`/todos/${todoId}/edit`)
+    this.props.history.push(`/announcements/${todoId}/edit`)
   }
 
   onTodoDelete = async (announcementId: string) => {
     try {
       await deleteAnnouncement(this.props.auth.getIdToken(), announcementId)
       this.setState({
-        todos: this.state.todos.filter(todo => todo.announcementId != announcementId)
+        announcements: this.state.announcements.filter(announcement => announcement.announcementId != announcementId)
       })
     } catch {
       alert('Todo deletion failed')
@@ -63,13 +63,13 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
 
   onTodoCheck = async (pos: number) => {
     try {
-      const todo = this.state.todos[pos]
-      await patchAnnouncement(this.props.auth.getIdToken(), todo.announcementId, {
-        published: todo.published === 1 ? 0 : 1
+      const announcement = this.state.announcements[pos]
+      await patchAnnouncement(this.props.auth.getIdToken(), announcement.announcementId, {
+        published: announcement.published === 1 ? 0 : 1
       })
       this.setState({
-        todos: update(this.state.todos, {
-          [pos]: { published: { $set: todo.published === 1 ? 0 : 1 } }
+        announcements: update(this.state.announcements, {
+          [pos]: { published: { $set: announcement.published === 1 ? 0 : 1 } }
         })
       })
     } catch {
@@ -91,12 +91,12 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
     }
 
     try {
-      const newTodo = await createAnnouncement(this.props.auth.getIdToken(), {
+      const newAnnouncement = await createAnnouncement(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
         description: this.state.newTodoDescription,
       })
       this.setState({
-        todos: [...this.state.todos, newTodo],
+        announcements: [...this.state.announcements, newAnnouncement],
         newTodoName: '',
         newTodoDescription: ''
       })
@@ -149,7 +149,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
   }
 
   renderAnnouncements() {
-    if (this.state.loadingTodos) {
+    if (this.state.loadingAnnouncements) {
       return this.renderLoading()
     }
 
@@ -169,7 +169,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
   renderAnnouncementsList() {
     return (
       <Grid padded>
-        {this.state.todos.map((announcement, pos) => {
+        {this.state.announcements.map((announcement, pos) => {
           return (
             <Grid.Row key={announcement.announcementId}>
               <Grid.Column width={1} verticalAlign="middle">
