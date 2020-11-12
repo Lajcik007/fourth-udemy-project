@@ -7,6 +7,7 @@ import { EditTodo } from './components/EditTodo'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
 import { Todos } from './components/Todos'
+import { MyAnnouncements } from './components/MyAnnouncements'
 
 export interface AppProps {}
 
@@ -53,6 +54,10 @@ export default class App extends Component<AppProps, AppState> {
     )
   }
 
+  onMyAnnouncementsClick = () => {
+    this.props.history.push(`/todos/my/announcements`)
+  }
+
   generateMenu() {
     return (
       <Menu>
@@ -68,9 +73,14 @@ export default class App extends Component<AppProps, AppState> {
   logInLogOutButton() {
     if (this.props.auth.isAuthenticated()) {
       return (
-        <Menu.Item name="logout" onClick={this.handleLogout}>
-          Log Out
-        </Menu.Item>
+        <>
+          <Menu.Item name="logout" onClick={() => this.onMyAnnouncementsClick()}>
+            My Announcements
+          </Menu.Item>
+          <Menu.Item name="logout" onClick={this.handleLogout}>
+            Log Out
+          </Menu.Item>
+        </>
       )
     } else {
       return (
@@ -102,6 +112,12 @@ export default class App extends Component<AppProps, AppState> {
           render={props => {
             return <EditTodo {...props} auth={this.props.auth} />
           }}
+        />
+
+        <Route
+          path="/todos/my/announcements"
+          exact
+          render={props => <MyAnnouncements {...props} auth={this.props.auth} />}
         />
 
         <Route component={NotFound} />

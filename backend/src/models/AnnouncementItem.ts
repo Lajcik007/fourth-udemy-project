@@ -3,7 +3,7 @@ export interface AnnouncementItem {
   announcementId: string
   createdAt: string
   name: string
-  dueDate: string
-  done: boolean
+  description: string;
+  published: number;
   attachmentUrl?: string
 }

@@ -15,10 +15,30 @@ export class AnnouncementsAccess {
        private readonly docClient: DocumentClient = createDynamoDBClient(),
        private readonly announcementsTable = process.env.ANNOUNCEMENTS_TABLE,
        private readonly userIdIndex = process.env.USER_ID_INDEX,
+       private readonly publishedIndex = process.env.PUBLISHED_INDEX,
        private readonly bucketName = process.env.IMAGES_S3_BUCKET
     ) {}
 
-    async getAllAnnouncements(userId: string): Promise<AnnouncementItem[]> {
+    async getAllAnnouncements(): Promise<AnnouncementItem[]> {
+        logger.info('Getting all announcements')
+
+        const data = await this.docClient
+            .query({
+                TableName: this.announcementsTable,
+                IndexName : this.publishedIndex,
+                KeyConditionExpression: 'published = :published',
+                ExpressionAttributeValues: {
+                    ':published': 1
+                }
+            })
+            .promise();
+
+        const items = data.Items;
+
+        return items as AnnouncementItem[];
+    }
+
+    async getUserAnnouncements(userId: string): Promise<AnnouncementItem[]> {
         logger.info('Getting all announcements for user with userId', userId)
 
         const data = await this.docClient
@@ -46,7 +66,7 @@ export class AnnouncementsAccess {
             announcementId,
             userId,
             ...announcementData,
-            done: false,
+            published: 0,
             createdAt: new Date().toISOString()
         };
 
@@ -84,20 +104,16 @@ export class AnnouncementsAccess {
     }
 
     async updatedAnnouncement(announcementId: string, announcementData: UpdateAnnouncementRequest): Promise<void> {
-        logger.info('Updating announcement with Id', announcementId)
+        logger.info(`Updating announcement with Id: ${announcementId} with data ${JSON.stringify(announcementData)}`)
+
         await this.docClient.update({
             TableName: this.announcementsTable,
             Key:{
                 "announcementId": announcementId,
             },
-            UpdateExpression: "set #n=:announcementName, dueDate=:dueDate, done=:done",
-            ExpressionAttributeNames: {
-                "#n":"name"
-            },
+            UpdateExpression: "set published=:published",
             ExpressionAttributeValues: {
-                ":announcementName": announcementData.name,
-                ":dueDate": announcementData.dueDate,
-                ":done": announcementData.done
+                ":published": announcementData.published,
             },
             ReturnValues:"NONE"
         }).promise()

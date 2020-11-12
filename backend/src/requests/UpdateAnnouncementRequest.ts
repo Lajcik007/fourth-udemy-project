@@ -1,8 +1,6 @@
 /**
- * Fields in a request to update a single TODO item.
+ * Fields in a request to update a single Announcement item.
  */
 export interface UpdateAnnouncementRequest {
-  name: string
-  dueDate: string
-  done: boolean
+  published: number
 }

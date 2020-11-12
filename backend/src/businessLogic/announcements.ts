@@ -6,7 +6,11 @@ import { UpdateAnnouncementRequest } from "../requests/UpdateAnnouncementRequest
 const announcementsAccess = new AnnouncementsAccess()
 
 export async function getUserAnnouncements(userId: string): Promise<AnnouncementItem[]> {
-    return await announcementsAccess.getAllAnnouncements(userId)
+    return await announcementsAccess.getUserAnnouncements(userId)
+}
+
+export async function getAllAnnouncements(): Promise<AnnouncementItem[]> {
+    return await announcementsAccess.getAllAnnouncements()
 }
 
 export async function createAnnouncement(

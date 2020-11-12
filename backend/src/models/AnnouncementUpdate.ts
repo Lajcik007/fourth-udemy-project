@@ -1,5 +1,3 @@
 export interface AnnouncementUpdate {
-  name: string
-  dueDate: string
-  done: boolean
+  published: 0 | 1
 }
