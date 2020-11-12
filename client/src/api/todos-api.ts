@@ -1,8 +1,8 @@
 import { apiEndpoint } from '../config'
 import { Todo } from '../types/Todo';
-import { CreateTodoRequest } from '../types/CreateTodoRequest';
+import { CreateAnnouncementsRequest } from '../types/CreateAnnouncementsRequest';
 import Axios from 'axios'
-import { UpdateTodoRequest } from '../types/UpdateTodoRequest';
+import { UpdateAnnouncementsRequest } from '../types/UpdateAnnouncementsRequest';
 
 export async function getTodos(idToken: string): Promise<Todo[]> {
   console.log('Fetching user todos')
@@ -32,7 +32,7 @@ export async function getAllTodos(idToken: string): Promise<Todo[]> {
 
 export async function createTodo(
   idToken: string,
-  newTodo: CreateTodoRequest
+  newTodo: CreateAnnouncementsRequest
 ): Promise<Todo> {
   const response = await Axios.post(`${apiEndpoint}/announcement`,  JSON.stringify(newTodo), {
     headers: {
@@ -46,7 +46,7 @@ export async function createTodo(
 export async function patchTodo(
   idToken: string,
   todoId: string,
-  updatedTodo: UpdateTodoRequest
+  updatedTodo: UpdateAnnouncementsRequest
 ): Promise<void> {
   await Axios.patch(`${apiEndpoint}/announcement/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
