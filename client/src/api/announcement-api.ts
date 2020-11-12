@@ -4,7 +4,7 @@ import { CreateAnnouncementsRequest } from '../types/CreateAnnouncementsRequest'
 import Axios from 'axios'
 import { UpdateAnnouncementsRequest } from '../types/UpdateAnnouncementsRequest';
 
-export async function getAnnouncement(idToken: string): Promise<Announcement[]> {
+export async function getAnnouncements(idToken: string): Promise<Announcement[]> {
   console.log('Fetching user todos')
 
   const response = await Axios.get(`${apiEndpoint}/announcement/for/user`, {
@@ -17,7 +17,7 @@ export async function getAnnouncement(idToken: string): Promise<Announcement[]> 
   return response.data.items
 }
 
-export async function getAllAnnouncement(idToken: string): Promise<Announcement[]> {
+export async function getAllAnnouncements(idToken: string): Promise<Announcement[]> {
   console.log('Fetching all todos')
 
   const response = await Axios.get(`${apiEndpoint}/announcement`, {
@@ -30,7 +30,7 @@ export async function getAllAnnouncement(idToken: string): Promise<Announcement[
   return response.data.items
 }
 
-export async function createTodo(
+export async function createAnnouncement(
   idToken: string,
   newTodo: CreateAnnouncementsRequest
 ): Promise<Announcement> {

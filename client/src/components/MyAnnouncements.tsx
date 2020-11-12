@@ -2,7 +2,7 @@ import * as React from 'react'
 import Auth from '../auth/Auth'
 import { History } from 'history'
 import { Announcement } from '../types/Announcement'
-import { createTodo, deleteTodo, getAnnouncement, patchTodo } from '../api/announcement-api'
+import { createAnnouncement, deleteTodo, getAnnouncements, patchTodo } from '../api/announcement-api'
 import update from 'immutability-helper'
 import { Button, Checkbox, Divider, Grid, Header, Icon, Image, Input, Loader } from 'semantic-ui-react'
 
@@ -28,7 +28,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
 
   async componentDidMount() {
     try {
-      const todos = await getAnnouncement(this.props.auth.getIdToken())
+      const todos = await getAnnouncements(this.props.auth.getIdToken())
       this.setState({
         todos,
         loadingTodos: false
@@ -91,7 +91,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
     }
 
     try {
-      const newTodo = await createTodo(this.props.auth.getIdToken(), {
+      const newTodo = await createAnnouncement(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
         description: this.state.newTodoDescription,
       })
@@ -111,14 +111,14 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
       <div>
         <Header as="h1">My announcements</Header>
 
-        {this.renderCreateTodoInput()}
+        {this.renderCreateAnnouncementInput()}
 
         {this.renderTodos()}
       </div>
     )
   }
 
-  renderCreateTodoInput() {
+  renderCreateAnnouncementInput() {
     return (
       <Grid.Row>
         <Grid.Column width={8}>
