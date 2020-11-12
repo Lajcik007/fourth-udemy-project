@@ -113,7 +113,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
 
         {this.renderCreateAnnouncementInput()}
 
-        {this.renderTodos()}
+        {this.renderAnnouncements()}
       </div>
     )
   }
@@ -148,12 +148,12 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
     )
   }
 
-  renderTodos() {
+  renderAnnouncements() {
     if (this.state.loadingTodos) {
       return this.renderLoading()
     }
 
-    return this.renderTodosList()
+    return this.renderAnnouncementsList()
   }
 
   renderLoading() {
@@ -166,7 +166,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
     )
   }
 
-  renderTodosList() {
+  renderAnnouncementsList() {
     return (
       <Grid padded>
         {this.state.todos.map((todo, pos) => {

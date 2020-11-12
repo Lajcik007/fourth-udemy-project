@@ -45,17 +45,17 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       <div>
         <Header as="h1">Public announcements</Header>
 
-        {this.renderTodos()}
+        {this.renderAnnouncements()}
       </div>
     )
   }
 
-  renderTodos() {
+  renderAnnouncements() {
     if (this.state.loadingTodos) {
       return this.renderLoading()
     }
 
-    return this.renderTodosList()
+    return this.renderAnnouncementsList()
   }
 
   renderLoading() {
@@ -68,7 +68,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     )
   }
 
-  renderTodosList() {
+  renderAnnouncementsList() {
     return (
       <Grid padded>
         {this.state.todos.map((todo, pos) => {
