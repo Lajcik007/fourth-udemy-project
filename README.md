@@ -22,6 +22,13 @@ npm install
 sls deploy -v
 ```
 
+* To run serverless locally, dynamodb need to be installed
+```
+sls dynamodb install
+sls dynamodb start
+```
+* To start serverless offline execute `sls offline`.
+
 ## Frontend
 
 To run a client application first edit the `client/src/config.ts` file to set correct parameters. And then run the following commands:

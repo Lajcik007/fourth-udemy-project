@@ -9,10 +9,10 @@ const s3 = new XAWS.S3({
 const bucketName = process.env.IMAGES_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
-export function getUploadUrl(todoId: string) {
+export function getUploadUrl(announcementId: string) {
     return s3.getSignedUrl('putObject', {
         Bucket: bucketName,
-        Key: todoId,
+        Key: announcementId,
         Expires: parseInt(urlExpiration)
     })
 }

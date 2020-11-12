@@ -18,7 +18,7 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment:
-    TODOS_TABLE: Announcements-${self:provider.stage}
+    ANNOUNCEMENTS_TABLE: Announcements-${self:provider.stage}
     USER_ID_INDEX: UserIdIndex
     IMAGES_S3_BUCKET: severless-announcements-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
@@ -31,87 +31,88 @@ custom:
         title: Announcements dashboard API
         description: Serverless application for announcements dashboard
     models:
-      - name: TodoRequest
+      - name: AnnouncementRequest
         contentType: application/json
-        schema: ${file(models/create-todo-request.json)}
-      - name: TodoUpdateRequest
+        schema: ${file(models/create-announcement-request.json)}
+      - name: AnnouncementUpdateRequest
         contentType: application/json
-        schema: ${file(models/update-todo-request.json)}
+        schema: ${file(models/update-announcement-request.json)}
 
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
-    iamRoleStatementsName: GetTodos-${self:provider.region}-${self:provider.stage}-iam-role
+  GetAnnouncements:
+    handler: src/lambda/http/getAnnouncements.handler
+    iamRoleStatementsName: GetAnnouncement-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ANNOUNCEMENTS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ANNOUNCEMENTS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
     events:
       - http:
           method: get
-          path: todos
+          path: announcement
           authorizer: Auth
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
-    iamRoleStatementsName: CreateTodo-${self:provider.region}-${self:provider.stage}-iam-role
+          cors: true
+  CreateAnnouncement:
+    handler: src/lambda/http/createAnnouncement.handler
+    iamRoleStatementsName: CreateAnnouncement-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ANNOUNCEMENTS_TABLE}
     events:
       - http:
           method: post
-          path: todos
+          path: announcement
           cors: true
           reqValidatorName: RequestBodyValidator
           authorizer: Auth
           documentation:
-            summary: Create a new todo
-            description: Create a new todo
+            summary: Create a new announcement
+            description: Create a new announcement
             requestModels:
-              application/json: TodoRequest
+              application/json: AnnouncementRequest
 
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
-    iamRoleStatementsName: UpdateTodo-${self:provider.region}-${self:provider.stage}-iam-role
+  UpdateAnnouncement:
+    handler: src/lambda/http/updateAnnouncement.handler
+    iamRoleStatementsName: UpdateAnnouncement-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ANNOUNCEMENTS_TABLE}
     events:
       - http:
           method: patch
-          path: todos/{todoId}
+          path: announcement/{announcementId}
           authorizer: Auth
           cors: true
           documentation:
-            summary: Update todo
-            description: Update todo
+            summary: Update announcement
+            description: Update announcement
             requestModels:
-              application/json: TodoUpdateRequest
+              application/json: AnnouncementUpdateRequest
 
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
-    iamRoleStatementsName: DeleteTodo-${self:provider.region}-${self:provider.stage}-iam-role
+  DeleteAnnouncement:
+    handler: src/lambda/http/deleteAnnouncement.handler
+    iamRoleStatementsName: DeleteAnnouncement-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - dynamodb:DeleteItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ANNOUNCEMENTS_TABLE}
     events:
       - http:
           method: delete
-          path: todos/{todoId}
+          path: announcement/{announcementId}
           authorizer: Auth
           cors: true
 
@@ -122,7 +123,7 @@ functions:
       - Effect: "Allow"
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ANNOUNCEMENTS_TABLE}
       - Effect: Allow
         Action:
           - s3:PutObject
@@ -131,7 +132,7 @@ functions:
     events:
       - http:
           method: post
-          path: todos/{todoId}/attachment
+          path: announcement/{announcementId}/attachment
           authorizer: Auth
           cors: true
 
@@ -158,19 +159,19 @@ resources:
         ValidateRequestBody: true
         ValidateRequestParameters: false
 
-    TodosTable:
+    AnnouncementTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: todoId
+          - AttributeName: announcementId
             AttributeType: S
           - AttributeName: userId
             AttributeType: S
         KeySchema:
-          - AttributeName: todoId
+          - AttributeName: announcementId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
+        TableName: ${self:provider.environment.ANNOUNCEMENTS_TABLE}
         GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.USER_ID_INDEX}
             KeySchema:

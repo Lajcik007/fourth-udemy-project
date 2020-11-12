@@ -1,16 +1,16 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { updateAttachmentUrl } from "../../businessLogic/todos";
+import { updateAttachmentUrl } from "../../businessLogic/announcements";
 import { getUploadUrl } from "../../s3/getUploadLink";
 
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const announcementId = event.pathParameters.announcementId
 
-  const uploadUrl = await getUploadUrl(todoId)
+  const uploadUrl = await getUploadUrl(announcementId)
 
-  await updateAttachmentUrl(todoId);
+  await updateAttachmentUrl(announcementId);
 
   return {
     statusCode: 200,

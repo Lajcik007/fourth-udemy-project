@@ -1,12 +1,12 @@
 import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
-import { deleteTodo } from "../../businessLogic/todos";
+import { deleteAnnouncement } from "../../businessLogic/announcements";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const announcementId = event.pathParameters.announcementId
 
-  await deleteTodo(todoId);
+  await deleteAnnouncement(announcementId);
 
   return {
     statusCode: 200,
@@ -14,6 +14,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    body: 'Todo deleted successfully'
+    body: 'Announcement deleted successfully'
   }
 }

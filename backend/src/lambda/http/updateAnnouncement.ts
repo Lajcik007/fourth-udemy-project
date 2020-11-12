@@ -2,15 +2,15 @@ import 'source-map-support/register'
 
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 
-import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
-import { updateTodo } from "../../businessLogic/todos";
+import { UpdateAnnouncementRequest } from '../../requests/UpdateAnnouncementRequest'
+import { updatedAnnouncement } from "../../businessLogic/announcements";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
+  const announcementId = event.pathParameters.announcementId
 
-  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+  const announcementData: UpdateAnnouncementRequest = JSON.parse(event.body)
 
-  await updateTodo(todoId, updatedTodo)
+  await updatedAnnouncement(announcementId, announcementData)
 
   return {
     statusCode: 200,
@@ -18,6 +18,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    body: 'Todo updated successfully'
+    body: 'Announcement updated successfully'
   }
 }
