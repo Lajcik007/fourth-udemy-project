@@ -46,9 +46,9 @@ export async function createAnnouncement(
 export async function patchAnnouncement(
   idToken: string,
   announcementId: string,
-  updatedTodo: UpdateAnnouncementsRequest
+  updatedAnnouncement: UpdateAnnouncementsRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/announcement/${announcementId}`, JSON.stringify(updatedTodo), {
+  await Axios.patch(`${apiEndpoint}/announcement/${announcementId}`, JSON.stringify(updatedAnnouncement), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
