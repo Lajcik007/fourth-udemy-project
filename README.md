@@ -4,7 +4,7 @@ Simple showcase of public dashboard for small announcements.
 
 # Functionality of the application
 
-* Users can create announcements in their private pulpit.
+* Users can create announcements in their private pulpit, which are visible only to them until published.
 * Users can add one image to their announcement.
 * User can publish an announcement which then will be shown on the main page of application.
 * User can delete their own announcements.
