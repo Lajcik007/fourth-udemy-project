@@ -15,7 +15,7 @@ Simple showcase of public dashboard for small announcements.
 ## Backend
 
 To deploy an application run the following commands:
-
+* Function are packaged separetly and for this you need to execute `export NODE_OPTIONS=--max_old_space_size=4096` before runing `sls deploy -v`.
 ```
 cd backend
 npm install

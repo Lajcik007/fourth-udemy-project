@@ -1,11 +1,14 @@
 service:
-  name: serverless-todo-app-v2
+  name: serverless-announcements-dashboard
 
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
+
+package:
+  individually: true
 
 provider:
   name: aws
@@ -15,9 +18,9 @@ provider:
   region: ${opt:region, 'us-east-1'}
 
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}
+    TODOS_TABLE: Announcements-${self:provider.stage}
     USER_ID_INDEX: UserIdIndex
-    IMAGES_S3_BUCKET: severless-todoapp-images-v2-${self:provider.stage}
+    IMAGES_S3_BUCKET: severless-announcements-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
 custom:
@@ -25,8 +28,8 @@ custom:
     api:
       info:
         version: v1.0.0
-        title: TODOs API
-        description: Serverless application for todos
+        title: Announcements dashboard API
+        description: Serverless application for announcements dashboard
     models:
       - name: TodoRequest
         contentType: application/json
@@ -41,6 +44,7 @@ functions:
 
   GetTodos:
     handler: src/lambda/http/getTodos.handler
+    iamRoleStatementsName: GetTodos-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -57,6 +61,7 @@ functions:
           authorizer: Auth
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
+    iamRoleStatementsName: CreateTodo-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -77,6 +82,7 @@ functions:
 
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
+    iamRoleStatementsName: UpdateTodo-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -96,6 +102,7 @@ functions:
 
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
+    iamRoleStatementsName: DeleteTodo-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -110,6 +117,7 @@ functions:
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
+    iamRoleStatementsName: GenerateUploadUrl-${self:provider.region}-${self:provider.stage}-iam-role
     iamRoleStatements:
       - Effect: "Allow"
         Action:
