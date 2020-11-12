@@ -8,7 +8,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { getAllTodos } from '../api/todos-api'
+import { getAllAnnouncement } from '../api/announcement-api'
 import Auth from '../auth/Auth'
 import { Announcement } from '../types/Announcement'
 
@@ -30,7 +30,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   async componentDidMount() {
     try {
-      const todos = await getAllTodos(this.props.auth.getIdToken())
+      const todos = await getAllAnnouncement(this.props.auth.getIdToken())
       this.setState({
         todos,
         loadingTodos: false

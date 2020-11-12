@@ -2,7 +2,7 @@ import * as React from 'react'
 import Auth from '../auth/Auth'
 import { History } from 'history'
 import { Announcement } from '../types/Announcement'
-import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
+import { createTodo, deleteTodo, getAnnouncement, patchTodo } from '../api/announcement-api'
 import update from 'immutability-helper'
 import { Button, Checkbox, Divider, Grid, Header, Icon, Image, Input, Loader } from 'semantic-ui-react'
 
@@ -28,7 +28,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
 
   async componentDidMount() {
     try {
-      const todos = await getTodos(this.props.auth.getIdToken())
+      const todos = await getAnnouncement(this.props.auth.getIdToken())
       this.setState({
         todos,
         loadingTodos: false
