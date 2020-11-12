@@ -12,7 +12,7 @@ enum UploadState {
 interface EditAnnouncementProps {
   match: {
     params: {
-      todoId: string
+      announcementId: string
     }
   }
   auth: Auth
@@ -23,7 +23,7 @@ interface EditAnnouncementState {
   uploadState: UploadState
 }
 
-export class EditTodo extends React.PureComponent<
+export class EditAnnouncement extends React.PureComponent<
   EditAnnouncementProps,
   EditAnnouncementState
 > {
@@ -51,7 +51,7 @@ export class EditTodo extends React.PureComponent<
       }
 
       this.setUploadState(UploadState.FetchingPresignedUrl)
-      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.todoId)
+      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.announcementId)
 
       this.setUploadState(UploadState.UploadingFile)
       await uploadFile(uploadUrl, this.state.file)

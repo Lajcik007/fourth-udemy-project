@@ -3,7 +3,7 @@ import { Link, Route, Router, Switch } from 'react-router-dom'
 import { Grid, Menu, Segment } from 'semantic-ui-react'
 
 import Auth from './auth/Auth'
-import { EditTodo } from './components/EditTodo'
+import { EditAnnouncement } from './components/EditAnnouncement'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
 import { Announcements } from './components/Announcements'
@@ -110,7 +110,7 @@ export default class App extends Component<AppProps, AppState> {
           path="/announcements/:todoId/edit"
           exact
           render={props => {
-            return <EditTodo {...props} auth={this.props.auth} />
+            return <EditAnnouncement {...props} auth={this.props.auth} />
           }}
         />
 
