@@ -1,6 +1,7 @@
 # Serverless Announcements Dashboard
 
-Simple showcase of public dashboard for small announcements.
+Simple showcase of public dashboard for small announcements. 
+* Application build upon code used for fourth project.
 
 # Functionality of the application
 
@@ -25,7 +26,7 @@ sls deploy -v
 ## Frontend
 
 
-The `client` folder contains a web application that can use the API that should be developed in the project.
+The `client` folder contains a web application that can used with the API that is developed in the project.
 
 This frontend should work with your serverless application. The only file that you need to edit is the `config.ts` file in the `client` folder. This file configures your client application contains an API endpoint and Auth0 configuration:
 
@@ -47,8 +48,6 @@ cd client
 npm install
 npm run start
 ```
-
-
 
 This should start a development server with the React application that will interact with the serverless Announcements Dashboard application.
 
