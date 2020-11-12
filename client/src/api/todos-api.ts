@@ -1,10 +1,10 @@
 import { apiEndpoint } from '../config'
-import { Todo } from '../types/Todo';
+import { Announcement } from '../types/Announcement';
 import { CreateAnnouncementsRequest } from '../types/CreateAnnouncementsRequest';
 import Axios from 'axios'
 import { UpdateAnnouncementsRequest } from '../types/UpdateAnnouncementsRequest';
 
-export async function getTodos(idToken: string): Promise<Todo[]> {
+export async function getTodos(idToken: string): Promise<Announcement[]> {
   console.log('Fetching user todos')
 
   const response = await Axios.get(`${apiEndpoint}/announcement/for/user`, {
@@ -17,7 +17,7 @@ export async function getTodos(idToken: string): Promise<Todo[]> {
   return response.data.items
 }
 
-export async function getAllTodos(idToken: string): Promise<Todo[]> {
+export async function getAllTodos(idToken: string): Promise<Announcement[]> {
   console.log('Fetching all todos')
 
   const response = await Axios.get(`${apiEndpoint}/announcement`, {
@@ -33,7 +33,7 @@ export async function getAllTodos(idToken: string): Promise<Todo[]> {
 export async function createTodo(
   idToken: string,
   newTodo: CreateAnnouncementsRequest
-): Promise<Todo> {
+): Promise<Announcement> {
   const response = await Axios.post(`${apiEndpoint}/announcement`,  JSON.stringify(newTodo), {
     headers: {
       'Content-Type': 'application/json',

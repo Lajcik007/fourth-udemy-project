@@ -1,4 +1,4 @@
-export interface Todo {
+export interface Announcement {
   announcementId: string
   createdAt: string
   name: string

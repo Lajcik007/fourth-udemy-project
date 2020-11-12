@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Auth from '../auth/Auth'
 import { History } from 'history'
-import { Todo } from '../types/Todo'
+import { Announcement } from '../types/Announcement'
 import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
 import update from 'immutability-helper'
 import { Button, Checkbox, Divider, Grid, Header, Icon, Image, Input, Loader } from 'semantic-ui-react'
@@ -12,7 +12,7 @@ interface TodosProps {
 }
 
 interface TodosState {
-  todos: Todo[]
+  todos: Announcement[]
   newTodoName: string
   newTodoDescription: string
   loadingTodos: boolean

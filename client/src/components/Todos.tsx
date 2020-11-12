@@ -10,7 +10,7 @@ import {
 
 import { getAllTodos } from '../api/todos-api'
 import Auth from '../auth/Auth'
-import { Todo } from '../types/Todo'
+import { Announcement } from '../types/Announcement'
 
 interface TodosProps {
   auth: Auth
@@ -18,7 +18,7 @@ interface TodosProps {
 }
 
 interface TodosState {
-  todos: Todo[]
+  todos: Announcement[]
   loadingTodos: boolean
 }
 
