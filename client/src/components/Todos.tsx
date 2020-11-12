@@ -71,6 +71,17 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   renderAnnouncementsList() {
     return (
       <Grid padded>
+        <Grid.Row>
+          <Grid.Column className="ui header" width={5} verticalAlign="middle">
+            Title
+          </Grid.Column>
+          <Grid.Column className="ui header" width={11} verticalAlign="middle">
+            Description
+          </Grid.Column>
+          <Grid.Column width={16}>
+            <Divider />
+          </Grid.Column>
+        </Grid.Row>
         {this.state.todos.map((todo, pos) => {
           return (
             <Grid.Row key={todo.announcementId}>
