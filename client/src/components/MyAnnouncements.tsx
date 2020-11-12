@@ -169,26 +169,26 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
   renderAnnouncementsList() {
     return (
       <Grid padded>
-        {this.state.todos.map((todo, pos) => {
+        {this.state.todos.map((announcement, pos) => {
           return (
-            <Grid.Row key={todo.announcementId}>
+            <Grid.Row key={announcement.announcementId}>
               <Grid.Column width={1} verticalAlign="middle">
                 <Checkbox
                   onChange={() => this.onTodoCheck(pos)}
-                  checked={todo.published === 1}
+                  checked={announcement.published === 1}
                 />
               </Grid.Column>
               <Grid.Column width={5} verticalAlign="middle">
-                {todo.name}
+                {announcement.name}
               </Grid.Column>
               <Grid.Column width={7} verticalAlign="middle">
-                {todo.description}
+                {announcement.description}
               </Grid.Column>
               <Grid.Column width={1} floated="right">
                 <Button
                   icon
                   color="blue"
-                  onClick={() => this.onEditButtonClick(todo.announcementId)}
+                  onClick={() => this.onEditButtonClick(announcement.announcementId)}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -197,13 +197,13 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onTodoDelete(todo.announcementId)}
+                  onClick={() => this.onTodoDelete(announcement.announcementId)}
                 >
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
+              {announcement.attachmentUrl && (
+                <Image src={announcement.attachmentUrl} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />
