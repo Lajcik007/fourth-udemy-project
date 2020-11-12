@@ -2,7 +2,7 @@ import * as React from 'react'
 import Auth from '../auth/Auth'
 import { History } from 'history'
 import { Announcement } from '../types/Announcement'
-import { createAnnouncement, deleteTodo, getAnnouncements, patchTodo } from '../api/announcement-api'
+import { createAnnouncement, deleteAnnouncement, getAnnouncements, patchAnnouncement } from '../api/announcement-api'
 import update from 'immutability-helper'
 import { Button, Checkbox, Divider, Grid, Header, Icon, Image, Input, Loader } from 'semantic-ui-react'
 
@@ -52,7 +52,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
 
   onTodoDelete = async (announcementId: string) => {
     try {
-      await deleteTodo(this.props.auth.getIdToken(), announcementId)
+      await deleteAnnouncement(this.props.auth.getIdToken(), announcementId)
       this.setState({
         todos: this.state.todos.filter(todo => todo.announcementId != announcementId)
       })
@@ -64,7 +64,7 @@ export class MyAnnouncements extends React.PureComponent<TodosProps, TodosState>
   onTodoCheck = async (pos: number) => {
     try {
       const todo = this.state.todos[pos]
-      await patchTodo(this.props.auth.getIdToken(), todo.announcementId, {
+      await patchAnnouncement(this.props.auth.getIdToken(), todo.announcementId, {
         published: todo.published === 1 ? 0 : 1
       })
       this.setState({

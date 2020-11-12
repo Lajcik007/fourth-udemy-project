@@ -5,7 +5,7 @@ import Axios from 'axios'
 import { UpdateAnnouncementsRequest } from '../types/UpdateAnnouncementsRequest';
 
 export async function getAnnouncements(idToken: string): Promise<Announcement[]> {
-  console.log('Fetching user todos')
+  console.log('Fetching user Announcements')
 
   const response = await Axios.get(`${apiEndpoint}/announcement/for/user`, {
     headers: {
@@ -13,12 +13,12 @@ export async function getAnnouncements(idToken: string): Promise<Announcement[]>
       'Authorization': `Bearer ${idToken}`
     },
   })
-  console.log('Todos:', response.data)
+  console.log('Announcements:', response.data)
   return response.data.items
 }
 
 export async function getAllAnnouncements(idToken: string): Promise<Announcement[]> {
-  console.log('Fetching all todos')
+  console.log('Fetching all Announcements')
 
   const response = await Axios.get(`${apiEndpoint}/announcement`, {
     headers: {
@@ -26,15 +26,15 @@ export async function getAllAnnouncements(idToken: string): Promise<Announcement
       'Authorization': `Bearer ${idToken}`
     },
   })
-  console.log('Todos:', response.data)
+  console.log('Announcements:', response.data)
   return response.data.items
 }
 
 export async function createAnnouncement(
   idToken: string,
-  newTodo: CreateAnnouncementsRequest
+  newAnnouncement: CreateAnnouncementsRequest
 ): Promise<Announcement> {
-  const response = await Axios.post(`${apiEndpoint}/announcement`,  JSON.stringify(newTodo), {
+  const response = await Axios.post(`${apiEndpoint}/announcement`,  JSON.stringify(newAnnouncement), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -43,12 +43,12 @@ export async function createAnnouncement(
   return response.data.item
 }
 
-export async function patchTodo(
+export async function patchAnnouncement(
   idToken: string,
-  todoId: string,
+  announcementId: string,
   updatedTodo: UpdateAnnouncementsRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/announcement/${todoId}`, JSON.stringify(updatedTodo), {
+  await Axios.patch(`${apiEndpoint}/announcement/${announcementId}`, JSON.stringify(updatedTodo), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -56,11 +56,11 @@ export async function patchTodo(
   })
 }
 
-export async function deleteTodo(
+export async function deleteAnnouncement(
   idToken: string,
-  todoId: string
+  announcementId: string
 ): Promise<void> {
-  await Axios.delete(`${apiEndpoint}/announcement/${todoId}`, {
+  await Axios.delete(`${apiEndpoint}/announcement/${announcementId}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -70,9 +70,9 @@ export async function deleteTodo(
 
 export async function getUploadUrl(
   idToken: string,
-  todoId: string
+  announcementId: string
 ): Promise<string> {
-  const response = await Axios.post(`${apiEndpoint}/announcement/${todoId}/attachment`, '', {
+  const response = await Axios.post(`${apiEndpoint}/announcement/${announcementId}/attachment`, '', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
